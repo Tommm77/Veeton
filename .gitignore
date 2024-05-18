@@ -1,0 +1,21 @@
+# Environnement virtuel
+env/
+
+# Base de données
+db.sqlite3
+
+# Fichiers byte-compiled / optimisés
+__pycache__/
+*.py[cod]
+
+# Dossiers de médias et statics
+media/
+static/
+
+# Fichiers de configuration spécifiques à l'environnement local
+*.env
+*.json
+
+# Dossiers et fichiers de l'IDE
+.idea/
+*.swp
