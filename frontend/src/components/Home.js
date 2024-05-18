@@ -1,18 +1,20 @@
-// src/components/Home.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 function Home() {
     const [roomId, setRoomId] = useState('');
     const navigate = useNavigate();
 
     const handleCreate = async () => {
+        const newRoomId = uuidv4();
         try {
-            const response = await fetch('/api/chatrooms', {
+            const response = await fetch('/api/chatrooms/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ room_id: newRoomId})
             });
             const data = await response.json();
             if (response.ok) {

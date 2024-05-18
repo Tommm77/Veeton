@@ -1,31 +1,71 @@
-// src/components/ChatRoom.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 function ChatRoom() {
     const { roomId } = useParams();
     const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
 
     useEffect(() => {
-        const fetchMessages = async () => {
-            try {
-                const response = await fetch(`/api/messages?room_id=${roomId}`);
-                const data = await response.json();
-                if (response.ok) {
-                    setMessages(data);
-                } else {
-                    console.error('Failed to fetch messages:', data);
-                }
-            } catch (error) {
-                console.error('Error fetching messages:', error);
-            }
-        };
-        fetchMessages();
+        fetchMessages().then(r => console.log('Messages fetched'));
     }, [roomId]);
+
+    const fetchMessages = async () => {
+        try {
+            const response = await fetch(`/api/messages?room_id=${roomId}`);
+            const data = await response.json();
+            if (response.ok) {
+                setMessages(data);
+            } else {
+                console.error('Failed to fetch messages:', data);
+            }
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    };
+
+    const handleMessageSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            console.log("Sending message with data:", {
+                content: newMessage,
+                room_id: roomId
+            });
+            const response = await fetch('/api/messages/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    room_id: roomId,
+                    content: newMessage
+                })
+            });
+            if (response.ok) {
+                setNewMessage('');
+                fetchMessages();
+            } else {
+                const errorData = await response.json();
+                console.error('Failed to send message:', errorData);
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
 
     return (
         <div className="p-8">
             <h1 className="text-xl">Chat Room: {roomId}</h1>
+            <form onSubmit={handleMessageSubmit}>
+                <input
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Type a message..."
+                    className="border p-2 mr-2"
+                />
+                <button type="submit" className="bg-blue-500 text-white p-2">Send</button>
+            </form>
             <div>
                 {messages.map(msg => (
                     <p key={msg.id}>{msg.content}</p>
