@@ -54,21 +54,21 @@ function ChatRoom() {
     };
 
     return (
-        <div className="p-8">
-            <h1 className="text-xl">Chat Room: {roomId}</h1>
-            <form onSubmit={handleMessageSubmit}>
+        <div className="p-8 max-w-2xl mx-auto">
+            <h1 className="text-2xl font-bold mb-4">Chat Room: {roomId}</h1>
+            <form onSubmit={handleMessageSubmit} className="mb-4 flex items-center">
                 <input
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="Type a message..."
-                    className="border p-2 mr-2"
+                    className="border p-2 flex-grow mr-2 rounded"
                 />
-                <button type="submit" className="bg-blue-500 text-white p-2">Send</button>
+                <button type="submit" className="bg-blue-500 text-white p-2 rounded">Send</button>
             </form>
-            <div>
+            <div className="border p-4 rounded bg-gray-100">
                 {messages.map(msg => (
-                    <p key={msg.id}>{msg.content}</p>
+                    <p key={msg.id} className="mb-2 p-2 bg-white rounded shadow">{msg.content}</p>
                 ))}
             </div>
         </div>
