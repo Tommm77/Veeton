@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
+
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
 
 function ChatRoom() {
     const { roomId } = useParams();
+    const query = useQuery();
+    const password = query.get('password');
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
