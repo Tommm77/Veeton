@@ -5,11 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 function Home() {
     const [roomId, setRoomId] = useState('');
     const [password, setPassword] = useState('');
+    const [expirationDuration, setExpirationDuration] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [newRoomId, setNewRoomId] = useState('');
     const navigate = useNavigate();
 
-    const handleCreate = async () => {
+    const handleCreate = () => {
         const newRoomId = uuidv4();
         setNewRoomId(newRoomId);
         setShowModal(true);
@@ -22,7 +23,7 @@ function Home() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ room_id: newRoomId, password })
+                body: JSON.stringify({ room_id: newRoomId, password, expiration_duration: expirationDuration })
             });
             const data = await response.json();
             if (response.ok) {
@@ -76,8 +77,8 @@ function Home() {
 
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-                    <div className="bg-white p-6 rounded shadow-md">
-                        <h2 className="text-xl font-bold mb-4">Enter Password for New Room</h2>
+                    <div className="bg-white p-6 rounded shadow-md max-w-sm w-full">
+                        <h2 className="text-xl font-bold mb-4">Enter Details for New Room</h2>
                         <input
                             type="password"
                             placeholder="Enter Password"
@@ -85,6 +86,16 @@ function Home() {
                             onChange={e => setPassword(e.target.value)}
                             className="border p-2 w-full mb-4 rounded"
                         />
+                        <div className="mb-4">
+                            <label className="block text-gray-700 mb-2">Expiration Duration (minutes)</label>
+                            <input
+                                type="number"
+                                placeholder="Expiration Duration (minutes)"
+                                value={expirationDuration}
+                                onChange={e => setExpirationDuration(e.target.value)}
+                                className="border p-2 w-full rounded"
+                            />
+                        </div>
                         <div className="flex justify-end">
                             <button
                                 onClick={() => setShowModal(false)}
