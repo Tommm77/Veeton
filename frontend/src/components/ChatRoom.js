@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
 function ChatRoom() {
     const { roomId } = useParams();
@@ -68,7 +69,10 @@ function ChatRoom() {
             </form>
             <div className="border p-4 rounded bg-gray-100">
                 {messages.map(msg => (
-                    <p key={msg.id} className="mb-2 p-2 bg-white rounded shadow">{msg.content}</p>
+                    <div key={msg.id} className="mb-2 p-2 bg-white rounded shadow">
+                        <p>{msg.content}</p>
+                        <p className="text-gray-500 text-sm">{format(new Date(msg.timestamp), 'PPPpp')}</p>
+                    </div>
                 ))}
             </div>
         </div>
